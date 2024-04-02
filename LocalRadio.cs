@@ -11,7 +11,7 @@ public class LocalRadio
 {
     private static bool _stationActive = false;
     private static InputSimulator _simulator;
-    private static int currentVolume = 30;
+    private static int currentVolume = 0;
     private static readonly ILog log = LogManager.GetLogger($"{nameof(RadioMediaControl)}").SetShowsErrorsInUI(false);
 
     internal static void OnLoad()
@@ -24,7 +24,7 @@ public class LocalRadio
         ExtendedRadio.ExtendedRadio.OnRadioVolumeChanged += RadioVolumeChanged;
         ExtendedRadio.ExtendedRadio.OnRadioStationChanged += RadioStationChanged;
 
-
+        currentVolume = 30;
     }
 
     private static void RadioStationChanged(string newStation)
@@ -33,8 +33,12 @@ public class LocalRadio
         _stationActive = newStation == "Radio Media Control";
         if (_stationActive)
         {
-            log.Info("Setting radio volume to 0.3");
-            AudioManager.instance.radioVolume = 0.3f;
+            for (int i = 0; i < 60; i++)
+            {
+                VolumeDown();
+            }
+            log.Info("Setting radio volume to " + currentVolume / 100f);
+            AudioManager.instance.radioVolume = currentVolume / 100f;
         }
     }
 
@@ -56,45 +60,38 @@ public class LocalRadio
             _simulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.MEDIA_PREV_TRACK);
     }
 
+    private static object lockObject = new ();
+
     private static void RadioVolumeChanged(float newValue)
     {
-        int newVolume = (int) (newValue * 100);
-        log.Info($"Volume changed to {newVolume}");
-        if (_stationActive)
+        log.Info("lock");
+        lock (lockObject)
         {
-            if (newVolume == 0)
+            int newVolume = (int) (newValue * 100);
+            log.Info($"Volume changed to {newVolume}");
+            if (_stationActive)
             {
-                for (int i = 0; i < 50; i++)
+                if (newVolume > currentVolume)
                 {
-                    VolumeDown();
+                    int steps = (newVolume - currentVolume) / 2;
+                    for (int i = 0; i < steps; i++)
+                    {
+                        VolumeUp();
+                        currentVolume += 2;
+                    }
+                }
+                else if (newVolume < currentVolume)
+                {
+                    int steps = (currentVolume - newVolume) / 2;
+                    for (int i = 0; i < steps; i++)
+                    {
+                        VolumeDown();
+                        currentVolume -= 2;
+                    }
                 }
             }
-            if (newVolume == 100)
-            {
-                for (int i = 0; i < 50; i++)
-                {
-                    VolumeUp();
-                }
-            }
-
-            int steps = Math.Abs(newVolume - currentVolume) / 2;
-            log.Info("Changing from " + currentVolume + " to " + newVolume + " in " + steps + " steps");
-            if (newVolume > currentVolume)
-            {
-                for (int i = 0; i < steps; i++)
-                {
-                    VolumeUp();
-                }
-            }
-            else if (newVolume < currentVolume)
-            {
-                for (int i = 0; i < steps; i++)
-                {
-                    VolumeDown();
-                }
-            }
-            currentVolume = newVolume;
         }
+        log.Info("Unlock");
     }
 
 

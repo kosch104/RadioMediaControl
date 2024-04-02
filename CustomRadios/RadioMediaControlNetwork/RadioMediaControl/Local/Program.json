@@ -1,6 +1,6 @@
 {
   "name": "Local Media Application",
-  "description": "Description3",
+  "description": "Local Media",
   "icon": "coui://extendedradio/CustomRadios/RadioMediaControlNetwork/RadioMediaControl/icon.svg",
   "startTime": "00:00",
   "endTime": "00:00",

@@ -19,7 +19,6 @@ namespace RadioMediaControl
 		internal static string ResourcesIcons { get; private set; }
 
 		private Harmony harmony;
-		private static InputSimulator simulator;
 		private string pathToCustomRadiosFolder;
 		public void OnLoad(UpdateSystem updateSystem)
 		{
