@@ -58,6 +58,10 @@
 		<None Include="$(ModTargetsFile)" Link="Properties\Mod.targets" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="CustomRadios\" />
+	</ItemGroup>
+
   <Target Name="BuildUI" BeforeTargets="AfterBuild">
     <Exec Command="npm run build" WorkingDirectory="$(ProjectDir)/UI" />
   </Target>
@@ -75,5 +79,12 @@
     </ItemGroup>
     <Copy SourceFiles="@(UIFiles)" DestinationFiles="@(UIFiles->'$(DeployDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
+
+ <Target Name="GetCustomRadiosFiles" AfterTargets="DeployWIP">
+    <ItemGroup>
+        <AdditionalFilesToDeploy Include="CustomRadios\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(AdditionalFilesToDeploy)" DestinationFiles="@(AdditionalFilesToDeploy->'$(DeployDir)\CustomRadios\%(RecursiveDir)%(Filename)%(Extension)')" />
+ </Target>
   
 </Project>

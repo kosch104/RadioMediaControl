@@ -1,0 +1,8 @@
+{
+    "name":"Radio Media Control",
+    "nameId": "RadioMediaControl",
+    "description": "Control your own music here",
+    "descriptionId": "Control your own music here",
+    "icon": "coui://extendedradio/CustomRadios/RadioMediaControlNetwork/RadioMediaControlNetwork.svg",
+    "allowAds": true
+}

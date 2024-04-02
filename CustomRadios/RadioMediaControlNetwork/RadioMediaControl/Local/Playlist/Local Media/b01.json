@@ -1,0 +1,17 @@
+{
+    "Title": "Local Media",
+    "Album": "Local Media Album",
+    "Artist": "Konsi",
+    "Type": null,
+    "Brand": null,
+    "RadioStation": null,
+    "RadioChannel": null,
+    "PSAType": null,
+    "AlertType": null,
+    "NewsType": null,
+    "WeatherType": null,
+    "loopStart": -1,
+    "loopEnd": -1,
+    "alternativeStart": -1,
+    "fadeoutTime": 1
+}

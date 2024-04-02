@@ -20,6 +20,7 @@ namespace RadioMediaControl
 
 		private Harmony harmony;
 		private static InputSimulator simulator;
+		private string pathToCustomRadiosFolder;
 		public void OnLoad(UpdateSystem updateSystem)
 		{
 			Debug.Log(nameof(OnLoad));
@@ -27,11 +28,6 @@ namespace RadioMediaControl
 			if (!GameManager.instance.modManager.TryGetExecutableAsset(this, out var asset)) return;
 
 			log.Info($"Current mod asset at {asset.path}");
-
-			FileInfo fileInfo = new(asset.path);
-
-			ResourcesIcons = Path.Combine(fileInfo.DirectoryName, "Icons");
-
 
 			harmony = new($"{nameof(RadioMediaControl)}.{nameof(RMC)}");
 			harmony.PatchAll(typeof(RMC).Assembly);
@@ -41,46 +37,18 @@ namespace RadioMediaControl
 			{
 				log.Info($"Patched method: {patchedMethod.Module.Name}:{patchedMethod.Name}");
 			}
+			LocalRadio.OnLoad();
 
-			simulator = new InputSimulator();
-			ExtendedRadio.ExtendedRadio.OnRadioPaused += RadioPlayPause;
-			ExtendedRadio.ExtendedRadio.OnRadioUnPaused += RadioPlayPause;
-			ExtendedRadio.ExtendedRadio.OnRadioPreviousSong += RadioPrevious;
-			ExtendedRadio.ExtendedRadio.OnRadioNextSong += RadioNext;
-
-			/*try
-			{
-				Logger.Info("Creating Input Simulator");
-				InputSimulator simulator = new InputSimulator();
-				Logger.Info("Simulator Created");
-				simulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.MEDIA_PLAY_PAUSE);
-				Logger.Info("Button pressed");
-			}
-			catch (Exception x)
-			{
-				Logger.Info("Error: " + x);
-			}*/
+			pathToCustomRadiosFolder = $"{new FileInfo(asset.path).DirectoryName}\\CustomRadios";
+			ExtendedRadio.CustomRadios.RegisterCustomRadioDirectory(pathToCustomRadiosFolder);
 		}
 
-		private void RadioPlayPause()
-		{
-			log.Info("Hello there");
-			simulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.MEDIA_PLAY_PAUSE);
-		}
 
-		private void RadioNext()
-		{
-			simulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.MEDIA_NEXT_TRACK);
-		}
-
-		private void RadioPrevious()
-		{
-			simulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.MEDIA_PREV_TRACK);
-		}
 
 		public void OnDispose()
 		{
 			Debug.Log((nameof(OnDispose)));
+			ExtendedRadio.CustomRadios.UnRegisterCustomRadioDirectory(pathToCustomRadiosFolder);
 			harmony.UnpatchAll($"{nameof(RadioMediaControl)}.{nameof(RMC)}");
 		}
 	}
