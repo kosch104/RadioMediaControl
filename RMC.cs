@@ -48,7 +48,14 @@ namespace RadioMediaControl
 		public void OnDispose()
 		{
 			Debug.Log((nameof(OnDispose)));
-			ExtendedRadio.CustomRadios.UnRegisterCustomRadioDirectory(pathToCustomRadiosFolder);
+			try
+			{
+				ExtendedRadio.CustomRadios.UnRegisterCustomRadioDirectory(pathToCustomRadiosFolder);
+			}
+			catch (Exception e)
+			{
+			}
+
 			harmony.UnpatchAll($"{nameof(RadioMediaControl)}.{nameof(RMC)}");
 		}
 	}

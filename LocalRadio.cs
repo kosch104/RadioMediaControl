@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Colossal.Logging;
 using Game.Audio;
+using Game.Audio.Radio;
 using Game.SceneFlow;
 using WindowsInput;
 
@@ -26,6 +27,14 @@ public class LocalRadio
         ExtendedRadio.ExtendedRadio.OnRadioStationChanged += RadioStationChanged;
 
         currentVolume = 30;
+        try
+        {
+            log.Info("On start playing: " + AudioManager.instance.radio.currentChannel.name);
+        }
+        catch (Exception e)
+        {
+
+        }
     }
 
     private static void RadioStationChanged(string newStation)
