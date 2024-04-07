@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using Colossal.Logging;
 using Game.Audio;
-using Game.Audio.Radio;
-using Game.SceneFlow;
 using WindowsInput;
 
 namespace RadioMediaControl;
 
 public class LocalRadio
 {
-    private static bool _stationActive = false;
     private static InputSimulator _simulator;
     private static int currentVolume = 0;
     private static readonly ILog log = LogManager.GetLogger($"{nameof(RadioMediaControl)}").SetShowsErrorsInUI(false);
@@ -40,8 +35,7 @@ public class LocalRadio
     private static void RadioStationChanged(string newStation)
     {
         log.Info($"Station changed to {newStation}");
-        _stationActive = newStation == "Radio Media Control";
-        if (_stationActive)
+        if (AudioManager.instance.radio.currentChannel.name == "Radio Media Control")
         {
             for (int i = 0; i < 60; i++)
             {
@@ -50,26 +44,26 @@ public class LocalRadio
 
             float newVolume = currentVolume / 100f;
             currentVolume = 0;
-            log.Info("Setting radio volume to " + newVolume);
+            log.Info("Setting initial radio volume to " + newVolume);
             AudioManager.instance.radioVolume = newVolume;
         }
     }
 
     private static void RadioPlayPause()
     {
-        if (_stationActive)
+        if (AudioManager.instance.radio.currentChannel.name == "Radio Media Control")
             _simulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.MEDIA_PLAY_PAUSE);
     }
 
     private static void RadioNext()
     {
-        if (_stationActive)
+        if (AudioManager.instance.radio.currentChannel.name == "Radio Media Control")
             _simulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.MEDIA_NEXT_TRACK);
     }
 
     private static void RadioPrevious()
     {
-        if (_stationActive)
+        if (AudioManager.instance.radio.currentChannel.name == "Radio Media Control")
             _simulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.MEDIA_PREV_TRACK);
     }
 
@@ -77,12 +71,12 @@ public class LocalRadio
 
     private static void RadioVolumeChanged(float newValue)
     {
-        lock (lockObject)
+        if (AudioManager.instance.radio.currentChannel.name == "Radio Media Control")
         {
-            int newVolume = (int) (newValue * 100);
-            log.Info($"Volume changed to {newVolume}");
-            if (_stationActive)
+            lock (lockObject)
             {
+                int newVolume = (int)(newValue * 100);
+                log.Info($"Volume changed to {newVolume}");
                 if (newVolume > currentVolume)
                 {
                     int steps = (newVolume - currentVolume) / 2;
