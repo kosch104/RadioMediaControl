@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Colossal.Logging;
 using Game.Audio;
+using Game.SceneFlow;
 using WindowsInput;
 
 namespace RadioMediaControl;
@@ -37,8 +38,11 @@ public class LocalRadio
             {
                 VolumeDown();
             }
-            log.Info("Setting radio volume to " + currentVolume / 100f);
-            AudioManager.instance.radioVolume = currentVolume / 100f;
+
+            float newVolume = currentVolume / 100f;
+            currentVolume = 0;
+            log.Info("Setting radio volume to " + newVolume);
+            AudioManager.instance.radioVolume = newVolume;
         }
     }
 
@@ -64,7 +68,6 @@ public class LocalRadio
 
     private static void RadioVolumeChanged(float newValue)
     {
-        log.Info("lock");
         lock (lockObject)
         {
             int newVolume = (int) (newValue * 100);
@@ -91,24 +94,25 @@ public class LocalRadio
                 }
             }
         }
-        log.Info("Unlock");
     }
 
 
-    private const int APPCOMMAND_VOLUME_UP = 0xA0000;
+    /*private const int APPCOMMAND_VOLUME_UP = 0xA0000;
     private const int APPCOMMAND_VOLUME_DOWN = 0x90000;
     private const int WM_APPCOMMAND = 0x319;
 
     [DllImport("user32.dll")]
-    public static extern IntPtr SendMessageW(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+    public static extern IntPtr SendMessageW(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);*/
 
     private static void VolumeUp()
     {
-        SendMessageW(Process.GetCurrentProcess().MainWindowHandle, WM_APPCOMMAND, Process.GetCurrentProcess().MainWindowHandle, (IntPtr)APPCOMMAND_VOLUME_UP);
+        _simulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VOLUME_UP);
+        //SendMessageW(Process.GetCurrentProcess().MainWindowHandle, WM_APPCOMMAND, Process.GetCurrentProcess().MainWindowHandle, (IntPtr)APPCOMMAND_VOLUME_UP);
     }
 
     private static void VolumeDown()
     {
-        SendMessageW(Process.GetCurrentProcess().MainWindowHandle, WM_APPCOMMAND, Process.GetCurrentProcess().MainWindowHandle, (IntPtr)APPCOMMAND_VOLUME_DOWN);
+        _simulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VOLUME_DOWN);
+        //SendMessageW(Process.GetCurrentProcess().MainWindowHandle, WM_APPCOMMAND, Process.GetCurrentProcess().MainWindowHandle, (IntPtr)APPCOMMAND_VOLUME_DOWN);
     }
 }

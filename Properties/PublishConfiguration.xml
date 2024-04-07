@@ -8,37 +8,22 @@
 	<!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
 	<!--LongDescription Value="This is a long description" /-->
 	<LongDescription>
-# Extra Networks and Areas
-This mod adds Invisible Roads, Custom Park Areas and Integrated Stops directly into the Game UI.
+# Radio Media Control
+This mod allows you to use the ingame radio control to control playback and volume of your local media. This includes Spotify, Youtube, and other media players.
 
 ## Features
-### Integrated Stations
-This Mod adds integrated stations to the Transportation tab. These stations are invisible markers that can be used to create your own custom Bus Terminals, Train Stations and much more.
-
-### Invisible Roads and Custom Parking Lots
-This mod adds all available invisible paths and roads to the User Interface. This includes the possibility to create custom parking lots without having to use developer tools.
-
-### Spaces and Areas
-Spaces and Areas are used by your Cims to determine where they can walk, spend their freetime in a park, or hang out. This previously needed access to developer tools, but now you can create them directly from the Terraforming Tab.
-
-### Animal Spawners
-This game has invisible animal spawners that can be used to periodically spawn animals of various types. They are found in the terraforming tab. I have heard of a player using these spawners in combination with a Walking area to create a zoo, but I never tested it myself.
+- Play/Pause
+- Volume Control (Controls your system volume, not that of the media player)
+- Next/Previous
 
 ## Feature roadmap
-- Translations
-- Outside Connections
-- Feel free to suggest more features!
-
-## Warning
-Please be careful using invisible roads and spaces. There have been issues reported in the past where invisible roads caused game crashes or corrupt savegames. Make sure to enable autosave and save your game often.
+- I might look into integrating actual third party media players (like spotify with playlist selection), but I can't promise anything.
 
 ## Acknowledgment
 Many people helped me in the creation of this mod. Especially I would like to thank
-* **CityRat** for various custom icons.
-* **Tigon ologdrin** for the icons of all spawner types.
-* **Triton Supreme** for detailed support with the prefab system.
+* **CityRat** for custom icons
+* **Triton Supreme** for Extended Radio
 * **89-pleasure** for helping me with the very first steps of modding.
-* **Yenyang** for the help and modding templates.
 	</LongDescription>
 	<!--Thumbnail-->
 	<Thumbnail Value="Properties/Thumbnail500.png" />

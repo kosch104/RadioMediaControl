@@ -8,7 +8,6 @@ using Game.Modding;
 using Game.SceneFlow;
 using HarmonyLib;
 using UnityEngine;
-using WindowsInput;
 
 namespace RadioMediaControl
 {
@@ -40,6 +39,8 @@ namespace RadioMediaControl
 
 			pathToCustomRadiosFolder = $"{new FileInfo(asset.path).DirectoryName}\\CustomRadios";
 			ExtendedRadio.CustomRadios.RegisterCustomRadioDirectory(pathToCustomRadiosFolder);
+
+
 		}
 
 
